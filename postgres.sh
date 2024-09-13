@@ -25,3 +25,12 @@ for DATABASE_NAME in "${DATABASES[@]}"; do
     echo "Backup failed for database $DATABASE_NAME."
   fi
 done
+
+# sample shorten script
+
+# docker exec -i laradock-postgres-1 pg_dump -U default doh_prod > "/home/doh/Desktop/efiling/laradock/.backups/doh_prod-backup-`date +%Y-%m-%d-%H:%M:%S`.sql"
+# find /home/doh/Desktop/efiling/laradock/.backups/*.sql -mtime +3 -type f -exec rm {} \;
+
+# sample cron script
+
+# 0 0 * * * root /home/doh/Desktop/efiling/laradock/postgres.sh >> /home/doh/Desktop/efiling/laradock/.backups/cron_logs.txt 2>&1

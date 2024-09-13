@@ -19,7 +19,7 @@ while [ $? -ne 0 ]; do
 done
 
 echo "Docker is running. Starting services..."
-docker-compose up -d nginx postgres pgadmin
+docker-compose up -d nginx-8.2 postgres pgadmin
 
 # add this code in your crontab
 # @reboot /path/to/your/script/start_docker.sh

@@ -1,10 +1,8 @@
 @echo off
+setlocal enabledelayedexpansion
 
 REM Define your container name
 set container_name=laradock-postgres-1
-
-REM Define an array of databases
-set databases=doh_ppmp_local doh_davao_occidental
 
 REM Get the current date and time
 for /f "delims=" %%a in ('wmic OS Get localdatetime ^| find "."') do set datetime=%%a
@@ -27,11 +25,16 @@ if "%container_id%" == "" (
 ) else (
    echo Container ID for "%container_name%" is %container_id%
 
-   REM Loop through the array of databases and perform backup
-   for %%d in (%databases%) do (
-       echo Backing up database: %%d
-       docker exec %container_name% pg_dump -U default -d %%d > "%backup_folder%\%%d-%datetime%.sql"
-       echo Backup completed for database: %%d
+   REM Retrieve the list of databases
+   for /f "delims=" %%d in ('docker exec %container_name% psql -U default -d postgres -t -c "SELECT datname FROM pg_database WHERE datistemplate = false;"') do (
+       set database=%%d
+       REM Trim spaces from the database name
+       set database=!database: =!
+       if not "!database!" == "" (
+           echo Backing up database: !database!
+           docker exec %container_name% pg_dump -U default -d !database! > "%backup_folder%\!database!-%datetime%.sql"
+           echo Backup completed for database: !database!
+       )
    )
 
    echo All backups completed.
