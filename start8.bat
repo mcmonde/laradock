@@ -3,6 +3,9 @@
 setlocal enabledelayedexpansion
 
 rem Define the ports you want to find and kill
+
+docker compose down
+
 set "ports=5432"
 
 for %%p in (%ports%) do (
