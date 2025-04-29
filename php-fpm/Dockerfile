@@ -87,6 +87,8 @@ RUN if [ ${INSTALL_PYTHON3} = true ]; then \
     && python3 -m venv /opt/esig \
     && chmod +x /opt/esig/bin/activate \
     && . /opt/esig/bin/activate \
+    && apt-get install -y python3-pip qpdf \
+    && pip3 install --break-system-packages pikepdf \
     && pip install \
     asn1crypto==1.5.1 \
     attrs==23.2.0 \
