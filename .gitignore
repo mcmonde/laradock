@@ -25,3 +25,7 @@
 docker-compose.custom.yml
 
 .DS_Store
+.backup
+.mariadb
+hoppscotch
+mssql

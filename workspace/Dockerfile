@@ -1879,7 +1879,6 @@ RUN if [ ${INSTALL_GITHUB_CLI} = true ]; then \
     && apt install gh -y \
 ;fi
 
-
 #
 #--------------------------------------------------------------------------
 # Final Touch

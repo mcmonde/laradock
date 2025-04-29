@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+FROM mcr.microsoft.com/mssql/server:2019-latest
+#FROM mcr.microsoft.com/azure-sql-edge:latest
 
 ENV MSSQL_PID=Express
 ENV MSSQL_DATABASE=$MSSQL_DATABASE
