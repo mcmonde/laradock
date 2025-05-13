@@ -25,3 +25,10 @@
 docker-compose.custom.yml
 
 .DS_Store
+.backup
+hoppscotch
+
+mssql/log
+mssql/secrets
+mssql/data
+mssql/.system

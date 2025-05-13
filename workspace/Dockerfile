@@ -1228,14 +1228,21 @@ RUN if [ ${INSTALL_PYTHON} = true ]; then \
 
 ARG INSTALL_PYTHON3=false
 
-RUN if [ ${INSTALL_PYTHON3} = true ]; then \
-  apt-get -y install python3 python3-dev build-essential  \
-  && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py  \
-  && python3 get-pip.py  \
-  && rm get-pip.py  \
-  && python3 -m pip install --upgrade --force-reinstall pip  \
-  && python3 -m pip install --upgrade virtualenv \
-;fi
+RUN if [ "${INSTALL_PYTHON3}" = true ]; then \
+    apt-get update && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository ppa:deadsnakes/ppa -y && \
+    apt-get update && \
+    apt-get install -y python3.12-full build-essential curl && \
+    curl -sS https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    python3.12 get-pip.py && \
+    rm get-pip.py && \
+    python3.12 -m pip install --upgrade pip && \
+    python3.12 -m pip install --upgrade virtualenv && \
+    ln -sf /usr/bin/python3.12 /usr/bin/python3 && \
+    ln -sf /usr/local/bin/pip /usr/bin/pip ; \
+fi
+
 
 ###########################################################################
 # POWERLINE:

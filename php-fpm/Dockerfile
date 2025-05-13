@@ -74,6 +74,50 @@ RUN set -xe; \
 #
 
 ###########################################################################
+# PYTHON3:
+###########################################################################
+
+ARG INSTALL_PYTHON3=false
+
+RUN if [ "${INSTALL_PYTHON3}" = true ]; then \
+    apt-get update && \
+    apt-get install -y \
+        python3 \
+        python3-pip \
+        python3-venv \
+        qpdf \
+        libssl-dev \
+        openssl \
+        git && \
+    python3 -m venv /opt/esig && \
+    /opt/esig/bin/pip install --upgrade pip && \
+    /opt/esig/bin/pip install \
+        --break-system-packages \
+        pikepdf \
+        asn1crypto==1.5.1 \
+        attrs==23.2.0 \
+        certifi==2024.6.2 \
+        cffi==1.16.0 \
+        charset-normalizer==3.3.2 \
+        cryptography==42.0.8 \
+        idna==3.7 \
+        git+https://github.com/wbond/oscrypto.git@d5f3437 \
+        pdfminer.six==20231228 \
+        pillow==10.3.0 \
+        pycparser==2.22 \
+        pycryptodome==3.20.0 \
+        pyOpenSSL \
+        PyPDF2==2.4.0 \
+        pytz==2024.1 \
+        requests==2.32.3 \
+        urllib3==2.2.2 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*; \
+fi
+
+
+
+###########################################################################
 # BZ2:
 ###########################################################################
 
@@ -721,12 +765,13 @@ RUN if [ ${INSTALL_MYSQLI} = true ]; then \
 
 ARG INSTALL_INTL=false
 
-RUN if [ ${INSTALL_INTL} = true ]; then \
-    # Install intl and requirements
+RUN if [ "${INSTALL_INTL}" = true ]; then \
+    apt-get update && \
     apt-get install -yqq zlib1g-dev libicu-dev g++ && \
     docker-php-ext-configure intl && \
-    docker-php-ext-install intl \
-;fi
+    docker-php-ext-install intl ; \
+fi
+
 
 ###########################################################################
 # GHOSTSCRIPT:
