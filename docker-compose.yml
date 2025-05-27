@@ -1568,13 +1568,14 @@ services:
       environment:
         GITLAB_OMNIBUS_CONFIG: |
           external_url '${GITLAB_DOMAIN_NAME}'
-          redis['enable'] = false
+          redis['enable'] = true
           nginx['listen_https'] = false
           nginx['listen_port'] = 80
           nginx['custom_gitlab_server_config'] = "set_real_ip_from 172.0.0.0/8;\nreal_ip_header X-Real-IP;\nreal_ip_recursive on;"
           postgresql['enable'] = false
           gitlab_rails['trusted_proxies'] = ['caddy','nginx','apache2']
           gitlab_rails['redis_host'] = 'redis'
+          gitlab_rails['redis_password'] = '${REDIS_PASSWORD}'
           gitlab_rails['redis_database'] = 8
           gitlab_rails['db_host'] = '${GITLAB_POSTGRES_HOST}'
           gitlab_rails['db_username'] = '${GITLAB_POSTGRES_USER}'
