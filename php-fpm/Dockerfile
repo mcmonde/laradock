@@ -81,12 +81,10 @@ ARG INSTALL_PYTHON3=false
 
 RUN if [ ${INSTALL_PYTHON3} = true ]; then \
     apt-get update \
-    && apt-get install -y python3 python3-pip python3-venv libssl-dev openssl git \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
+    && apt-get install -y python3 python3-pip python3-venv libssl-dev openssl git qpdf \
     && python3 -m venv /opt/esig \
-    && chmod +x /opt/esig/bin/activate \
     && . /opt/esig/bin/activate \
+    && pip3 install --break-system-packages pikepdf \
     && pip install \
     asn1crypto==1.5.1 \
     attrs==23.2.0 \
@@ -106,7 +104,10 @@ RUN if [ ${INSTALL_PYTHON3} = true ]; then \
     pytz==2024.1 \
     requests==2.32.3 \
     urllib3==2.2.2 \
-;fi
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*; \
+fi
+
 
 ###########################################################################
 # BZ2:
@@ -1427,6 +1428,23 @@ RUN groupmod -o -g ${PGID} www-data && \
 # otherwise it will preload it for all commands that follow in this file
 RUN if [ ${INSTALL_FAKETIME} = true ]; then \
     echo "/usr/lib/x86_64-linux-gnu/faketime/libfaketime.so.1" > /etc/ld.so.preload \
+;fi
+
+ARG INSTALL_PYTHON3=false
+
+RUN if [ ${INSTALL_PYTHON3} = true ]; then \
+    apt-get update \
+    && apt-get install -y \
+        python3 \
+        python3-pip \
+        python3-venv \
+        qpdf \
+        libssl-dev \
+        openssl \
+        git \
+    && python3 -m venv /opt/esig \
+    && /opt/esig/bin/pip install --upgrade pip \
+    && /opt/esig/bin/pip install pikepdf \
 ;fi
 
 # Configure locale.

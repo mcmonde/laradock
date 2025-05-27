@@ -28,3 +28,8 @@ docker-compose.custom.yml
 .backup
 .htaccess
 .mariadb
+hoppscotch
+mssql/.system/
+mssql/data/
+mssql/log/
+mssql/secrets/
