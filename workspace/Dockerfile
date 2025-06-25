@@ -1233,14 +1233,12 @@ RUN if [ "${INSTALL_PYTHON3}" = true ]; then \
     apt-get install -y software-properties-common && \
     add-apt-repository ppa:deadsnakes/ppa -y && \
     apt-get update && \
-    apt-get install -y python3.12-full build-essential curl && \
-    curl -sS https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
-    python3.12 get-pip.py && \
-    rm get-pip.py && \
-    python3.12 -m pip install --upgrade pip && \
-    python3.12 -m pip install --upgrade virtualenv && \
-    ln -sf /usr/bin/python3.12 /usr/bin/python3 && \
-    ln -sf /usr/local/bin/pip /usr/bin/pip ; \
+    apt-get install -y python3.12-full python3.12-venv build-essential curl && \
+    python3.12 -m venv /opt/pyenv && \
+    /opt/pyenv/bin/python -m ensurepip && \
+    /opt/pyenv/bin/pip install --upgrade pip virtualenv && \
+    ln -sf /opt/pyenv/bin/python /usr/local/bin/python3 && \
+    ln -sf /opt/pyenv/bin/pip /usr/local/bin/pip ; \
 fi
 
 
@@ -1551,8 +1549,8 @@ RUN if [ ${INSTALL_WKHTMLTOPDF} = true ]; then \
    xfonts-base \
    xfonts-75dpi \
    wget \
-   && wget "https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}.focal_${ARCH}.deb" \
-   && dpkg -i "wkhtmltox_${WKHTMLTOPDF_VERSION}.focal_${ARCH}.deb" \
+   && wget "https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.jammy_amd64.deb" \
+   && dpkg -i "wkhtmltox_0.12.6.1-3.jammy_amd64.deb" \
    && apt -f install \
 ;fi
 
