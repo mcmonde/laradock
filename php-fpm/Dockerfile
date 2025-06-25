@@ -110,7 +110,9 @@ RUN if [ "${INSTALL_PYTHON3}" = true ]; then \
         PyPDF2==2.4.0 \
         pytz==2024.1 \
         requests==2.32.3 \
-        urllib3==2.2.2 && \
+        urllib3==2.2.2 \
+        qrcode \
+        PyMuPDF && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*; \
 fi
