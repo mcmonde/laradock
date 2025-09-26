@@ -33,3 +33,7 @@ mssql/log
 mssql/secrets
 mssql/data
 mssql/.system
+
+.mysql.sh
+.mariadb.sh
+.postgres.sh
