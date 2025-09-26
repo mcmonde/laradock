@@ -11,8 +11,8 @@ databases=(
 
 # Loop through the databases and create backups
 for db in "${databases[@]}"; do
-    docker exec -i laradock_mysql_1 mysqldump "$db" > "/path/to/your/backups/${db_type}/${db}-backup-$(date +%Y-%m-%d-%H%M%S).sql"
+    docker exec -i laradock_mysql_1 mysqldump "$db" | gzip > "/path/to/your/backups/${db_type}/${db}-backup-$(date +%Y-%m-%d-%H%M%S).sql.gz"
 done
 
 # Clean up old backup files
-find /path/to/your/backups/${db_type}/*.sql -mtime +3 -type f -exec rm {} \;
+find /path/to/your/backups/${db_type}/*.sql.gz -mtime +3 -type f -exec rm {} \;
