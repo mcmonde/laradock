@@ -332,8 +332,6 @@ services:
         - FAKETIME=${PHP_FPM_FAKETIME}
         - TZ=${WORKSPACE_TIMEZONE}
 
-      depends_on:
-        - workspace
       networks:
         - backend
       links:
@@ -475,14 +473,13 @@ services:
       ports:
         - "${NGINX_HOST_HTTP_PORT}:80"
         - "${NGINX_HOST_HTTPS_PORT}:443"
-        - "${VARNISH_BACKEND_PORT}:81"
       depends_on:
         - php-fpm
       networks:
         - frontend
         - backend
       extra_hosts:
-        - "host.docker.internal:host-gateway"  
+        - "host.docker.internal:host-gateway"
 
 ### OpenResty Server #########################################
     openresty:
@@ -662,6 +659,7 @@ services:
 ### PostgreSQL ###########################################
     postgres:
       restart: always
+      # shm_size: 512mb
       build:
         context: ./postgres
         args:
@@ -697,6 +695,7 @@ services:
         - POSTGRES_CONFLUENCE_PASSWORD=${CONFLUENCE_POSTGRES_PASSWORD}
       networks:
         - backend
+
 ### pgbackups PostgreSQL ###########################################
     pgbackups:
       image: prodrigestivill/postgres-backup-local
@@ -712,7 +711,6 @@ services:
         - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       networks:
         - backend
-
 
 ### PostgreSQL PostGis ###################################
     postgres-postgis:
@@ -814,7 +812,7 @@ services:
 #        - frontend
         - backend
 
-  ### Redis ################################################
+### Redis ################################################
     redis:
       restart: always
       build: ./redis
@@ -1110,8 +1108,9 @@ services:
 ### MeiliSearch ##########################################
     meilisearch:
       image: getmeili/meilisearch:latest
+      restart: always
       volumes:
-        - ${DATA_PATH_HOST}/meilisearch:/data.ms
+        - ${DATA_PATH_HOST}/meilisearch:/meili_data
       ports:
         - "${MEILISEARCH_HOST_PORT}:7700"
       environment:
@@ -2228,7 +2227,7 @@ services:
         - frontend
         - backend
       restart: always
-  
+
   ### keycloak ##################################################
     keycloak:
       image: bitnami/keycloak:${KEYCLOAK_VERSION}
@@ -2249,3 +2248,14 @@ services:
       networks:
         - frontend
         - backend
+
+### mbtileserver ###################################################
+    mbtileserver:
+      image: ghcr.io/consbio/mbtileserver:0.11.0
+      container_name: laradock_mbtileserver
+      restart: unless-stopped
+      ports:
+        - "8000:8000"
+      volumes:
+        - "/qgis:/data"
+      command: ["--dir", "/data", "--verbose"]
