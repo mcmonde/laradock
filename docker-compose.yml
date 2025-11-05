@@ -1111,7 +1111,7 @@ services:
     meilisearch:
       image: getmeili/meilisearch:latest
       volumes:
-        - ${DATA_PATH_HOST}/meilisearch:/data.ms
+        - ${DATA_PATH_HOST}/meilisearch:/meili_data
       ports:
         - "${MEILISEARCH_HOST_PORT}:7700"
       environment:
@@ -2249,3 +2249,21 @@ services:
       networks:
         - frontend
         - backend
+
+### hoppscotch ######################################################
+    hoppscotch-aio:
+      container_name: hoppscotch-aio
+      image: hoppscotch/hoppscotch
+      env_file:
+        - ./.env
+      ports:
+        - "3333:3000"
+        - "3100:3100"
+        - "3170:3170"
+      depends_on:
+        - postgres  # <--- Change this to depend on the main 'postgres' service
+      restart: unless-stopped
+      networks:
+        - frontend
+        - backend
+
