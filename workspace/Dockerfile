@@ -1139,45 +1139,28 @@ RUN if [ ${INSTALL_LINUXBREW} = true ]; then \
 ARG INSTALL_MSSQL=false
 
 RUN set -eux; \
-  if [ ${INSTALL_MSSQL} = true ]; then \
-    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
-      apt-get install -yqq php5.6-sybase freetds-bin freetds-common libsybdb5 \
-      && php -m | grep -oiE '^mssql$' \
-      && php -m | grep -oiE '^pdo_dblib$' \
-    ;else \
-      ###########################################################################
-      #  The following steps were taken from
-      #  https://github.com/Microsoft/msphpsql/wiki/Install-and-configuration
-      ###########################################################################
-      curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
-      curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
-      apt-get update -yqq && \
-      ACCEPT_EULA=Y apt-get install -yqq msodbcsql18 mssql-tools18 unixodbc unixodbc-dev libgss3 odbcinst locales && \
-      ln -sfn /opt/mssql-tools/bin/sqlcmd /usr/bin/sqlcmd && \
-      ln -sfn /opt/mssql-tools/bin/bcp /usr/bin/bcp && \
-      echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-      locale-gen \
-      && if [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70000" ]; then \
-        pecl install pdo_sqlsrv-5.3.0 sqlsrv-5.3.0 \
-      ;elif [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70100" ]; then \
-        pecl install pdo_sqlsrv-5.6.1 sqlsrv-5.6.1 \
-      ;elif [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70200" ]; then \
-        pecl install pdo_sqlsrv-5.8.1 sqlsrv-5.8.1 \
-      ;elif [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70300" ]; then \
-        pecl install pdo_sqlsrv-5.9.0 sqlsrv-5.9.0 \
-      ;elif [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70400" ]; then \
-        pecl install pdo_sqlsrv-5.10.1 sqlsrv-5.10.1 \
-      ;elif [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "80000" ]; then \
-        pecl install pdo_sqlsrv-5.11.1 sqlsrv-5.11.1 \
-      ;else \
-        pecl install pdo_sqlsrv sqlsrv \
-      ;fi && \
-      echo "extension=pdo_sqlsrv.so" > /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-pdo_sqlsrv.ini && \
-      echo "extension=sqlsrv.so"     > /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-sqlsrv.ini && \
-      php -m | grep -oiE '^pdo_sqlsrv$' && \
-      php -m | grep -oiE '^sqlsrv$' \
-    ;fi \
-  ;fi
+    if [ "${INSTALL_MSSQL}" = true ]; then \
+        apt-get update -yqq && \
+        apt-get install -yqq apt-transport-https gnupg lsb-release curl locales && \
+        curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg && \
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" \
+            > /etc/apt/sources.list.d/mssql-release.list && \
+        apt-get update -yqq && \
+        ACCEPT_EULA=Y apt-get install -yqq msodbcsql18 mssql-tools18 unixodbc unixodbc-dev libgss3 odbcinst && \
+        ln -sfn /opt/mssql-tools/bin/sqlcmd /usr/bin/sqlcmd && \
+        ln -sfn /opt/mssql-tools/bin/bcp /usr/bin/bcp && \
+        echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && \
+        PHP_VER=$(php -r "echo PHP_VERSION_ID;"); \
+        if [ "$PHP_VER" -ge 80000 ]; then \
+            pecl install sqlsrv pdo_sqlsrv; \
+        else \
+            pecl install sqlsrv-5.10.1 pdo_sqlsrv-5.10.1; \
+        fi && \
+        mkdir -p /etc/php/8.3/cli/conf.d && \
+        echo "extension=sqlsrv.so" > /etc/php/8.3/cli/conf.d/20-sqlsrv.ini && \
+        echo "extension=pdo_sqlsrv.so" > /etc/php/8.3/cli/conf.d/20-pdo_sqlsrv.ini && \
+        php -m | grep -oiE 'sqlsrv' && php -m | grep -oiE 'pdo_sqlsrv'; \
+    fi
 
 ###########################################################################
 # Minio:
@@ -1923,6 +1906,19 @@ RUN if [ ${INSTALL_GITHUB_CLI} = true ]; then \
     && apt install gh -y \
 ;fi
 
+##########################################################################
+# dotnet 6
+##########################################################################
+
+ARG INSTALL_DOTNET=false
+
+RUN if [ ${INSTALL_DOTNET} = true ]; then \
+    apt-get update && apt-get install -y wget apt-transport-https gnupg && \
+    wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
+    dpkg -i packages-microsoft-prod.deb && \
+    apt-get update && \
+    apt-get install -y dotnet-sdk-${DOTNET_VERSION}.0\
+;fi
 
 #
 #--------------------------------------------------------------------------

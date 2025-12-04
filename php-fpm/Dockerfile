@@ -809,51 +809,25 @@ RUN if [ ${INSTALL_LDAP} = true ]; then \
 ARG INSTALL_MSSQL=false
 
 RUN set -eux; \
-  if [ ${INSTALL_MSSQL} = true ]; then \
-    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
-      apt-get -yqq install freetds-dev libsybdb5 \
-      && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
-      && docker-php-ext-install mssql pdo_dblib \
-      && php -m | grep -oiE '^mssql$' \
-      && php -m | grep -oiE '^pdo_dblib$' \
-    ;else \
-      ###########################################################################
-      # Ref from https://github.com/Microsoft/msphpsql/wiki/Dockerfile-for-adding-pdo_sqlsrv-and-sqlsrv-to-official-php-image
-      ###########################################################################
-      # Add Microsoft repo for Microsoft ODBC Driver 13 for Linux \
-      apt-get update \
-      && apt-get install -yqq apt-transport-https gnupg lsb-release \
-      && if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ] && [ ${LARADOCK_PHP_VERSION} != "8.0" ]; then \
-        curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
-      ;else \
-        curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-      ;fi \
-      && curl https://packages.microsoft.com/config/debian/$(lsb_release -rs)/prod.list > /etc/apt/sources.list.d/mssql-release.list \
-      && apt-get update -yqq \
-      && ACCEPT_EULA=Y apt-get install -yqq unixodbc unixodbc-dev libgss3 odbcinst msodbcsql18 locales \
-      && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
-      && ln -sfn /etc/locale.alias /usr/share/locale/locale.alias \
-      && locale-gen \
-      && if [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70000" ]; then \
-        pecl install pdo_sqlsrv-5.3.0 sqlsrv-5.3.0 \
-      ;elif [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70100" ]; then \
-        pecl install pdo_sqlsrv-5.6.1 sqlsrv-5.6.1 \
-      ;elif [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70200" ]; then \
-        pecl install pdo_sqlsrv-5.8.1 sqlsrv-5.8.1 \
-      ;elif [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70300" ]; then \
-        pecl install pdo_sqlsrv-5.9.0 sqlsrv-5.9.0 \
-      ;elif [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "70400" ]; then \
-        pecl install pdo_sqlsrv-5.10.1 sqlsrv-5.10.1 \
-      ;elif [ $(php -r "echo PHP_VERSION_ID - PHP_RELEASE_VERSION;") = "80000" ]; then \
-        pecl install pdo_sqlsrv-5.11.1 sqlsrv-5.11.1 \
-      ;else \
-        pecl install pdo_sqlsrv sqlsrv \
-      ;fi \
-      && docker-php-ext-enable pdo_sqlsrv sqlsrv \
-      && php -m | grep -oiE '^pdo_sqlsrv$' \
-      && php -m | grep -oiE '^sqlsrv$' \
-    ;fi \
-  ;fi
+    if [ "${INSTALL_MSSQL}" = true ]; then \
+        apt-get update -yqq && \
+        apt-get install -yqq apt-transport-https gnupg lsb-release curl locales && \
+        curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg && \
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" \
+            > /etc/apt/sources.list.d/mssql-release.list && \
+        apt-get update -yqq && \
+        ACCEPT_EULA=Y apt-get install -yqq msodbcsql18 mssql-tools18 unixodbc unixodbc-dev libgss3 odbcinst && \
+        ln -sfn /opt/mssql-tools/bin/sqlcmd /usr/bin/sqlcmd && \
+        ln -sfn /opt/mssql-tools/bin/bcp /usr/bin/bcp && \
+        echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && \
+        # Hardcode PHP version
+        PHP_VER=80300 && \
+        pecl install sqlsrv pdo_sqlsrv && \
+        mkdir -p /usr/local/etc/php/conf.d && \
+        echo "extension=sqlsrv.so" > /usr/local/etc/php/conf.d/20-sqlsrv.ini && \
+        echo "extension=pdo_sqlsrv.so" > /usr/local/etc/php/conf.d/20-pdo_sqlsrv.ini && \
+        php -m | grep -oiE 'sqlsrv' && php -m | grep -oiE 'pdo_sqlsrv'; \
+    fi
 
 ###########################################################################
 # Image optimizers:
