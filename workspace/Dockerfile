@@ -1312,27 +1312,21 @@ ARG IMAGEMAGICK_VERSION=latest
 ENV IMAGEMAGICK_VERSION ${IMAGEMAGICK_VERSION}
 
 RUN if [ ${INSTALL_IMAGEMAGICK} = true ]; then \
-    apt-get install -y libmagickwand-dev imagemagick && \
+    apt-get update && apt-get install -y libmagickwand-dev imagemagick git && rm -rf /var/lib/apt/lists/* && \
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-      apt-get install -y git && \
       cd /tmp && \
       if [ ${IMAGEMAGICK_VERSION} = "latest" ]; then \
         git clone https://github.com/Imagick/imagick; \
       else \
         git clone --branch ${IMAGEMAGICK_VERSION} https://github.com/Imagick/imagick; \
       fi && \
-      cd imagick && \
-      phpize && \
-      ./configure && \
-      make && \
-      make install && \
-      rm -r /tmp/imagick; \
+      cd imagick && phpize && ./configure && make && make install && rm -rf /tmp/imagick; \
     else \
-      pecl install imagick; \
+      pecl install imagick && docker-php-ext-enable imagick; \
     fi && \
-    echo "extension=imagick.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/imagick.ini && \
+    echo "extension=imagick.so" > /etc/php/${LARADOCK_PHP_VERSION}/mods-available/imagick.ini && \
     ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/imagick.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-imagick.ini && \
-    php -m | grep -q 'imagick' \
+    ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/imagick.ini /etc/php/${LARADOCK_PHP_VERSION}/fpm/conf.d/20-imagick.ini \
 ;fi
 
 ###########################################################################
@@ -1552,7 +1546,7 @@ RUN if [ ${INSTALL_POPPLER_UTILS} = true ]; then \
 ;fi
 
 #####################################
-# wkhtmltopdf:
+# wkhtmltopdf
 #####################################
 
 USER root
@@ -1560,23 +1554,25 @@ USER root
 ARG INSTALL_WKHTMLTOPDF=false
 ARG WKHTMLTOPDF_VERSION=0.12.6.1-3
 
-RUN if [ ${INSTALL_WKHTMLTOPDF} = true ]; then \
-   ARCH=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) \
-   && apt-get install -y \
-   libxrender1 \
-   libfontconfig1 \
-   libx11-dev \
-   libjpeg62 \
-   libxtst6 \
-   fontconfig \
-   libjpeg-turbo8-dev \
-   xfonts-base \
-   xfonts-75dpi \
-   wget \
-   && wget "https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}.jammy_${ARCH}.deb" \
-   && dpkg -i "wkhtmltox_${WKHTMLTOPDF_VERSION}.jammy_${ARCH}.deb" \
-   && apt -f install \
-;fi
+RUN if [ "${INSTALL_WKHTMLTOPDF}" = "true" ]; then \
+    ARCH=$(dpkg --print-architecture | sed s/arm64/arm64/ | sed s/amd64/amd64/) && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        libxrender1 \
+        libfontconfig1 \
+        libx11-dev \
+        libjpeg62 \
+        libxtst6 \
+        fontconfig \
+        libjpeg-turbo8 \
+        xfonts-base \
+        xfonts-75dpi \
+        wget && \
+    wget -q https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}.jammy_${ARCH}.deb && \
+    dpkg -i wkhtmltox_${WKHTMLTOPDF_VERSION}.jammy_${ARCH}.deb || apt-get -f install -y && \
+    rm wkhtmltox_${WKHTMLTOPDF_VERSION}.jammy_${ARCH}.deb && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*; \
+fi
 
 ###########################################################################
 # Mailparse extension:

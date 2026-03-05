@@ -1118,7 +1118,7 @@ RUN if [ ${INSTALL_POPPLER_UTILS} = true ]; then \
 ;fi
 
 #####################################
-# wkhtmltopdf:
+# wkhtmltopdf
 #####################################
 
 USER root
@@ -1126,38 +1126,25 @@ USER root
 ARG INSTALL_WKHTMLTOPDF=false
 ARG WKHTMLTOPDF_VERSION=0.12.6.1-3
 
-RUN if [ ${INSTALL_WKHTMLTOPDF} = true ]; then \
-    ARCH=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) \
-    && apt-get install -yqq \
-      libxrender1 \
-      libfontconfig1 \
-      libx11-dev \
-      libjpeg62 \
-      libxtst6 \
-      fontconfig \
-      libjpeg62-turbo \
-      xfonts-base \
-      xfonts-75dpi \
-      wget \
-    # && cat /etc/os-release \
-    && if [ ${LARADOCK_PHP_VERSION} = "5.6" ] || \
-        [ ${LARADOCK_PHP_VERSION} = "7.0" ]; then \
-      wget "https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.stretch_${ARCH}.deb"; \
-      dpkg -i "wkhtmltox_0.12.6-1.stretch_${ARCH}.deb"; \
-    elif [ ${LARADOCK_PHP_VERSION} = "7.1" ] || \
-        [ ${LARADOCK_PHP_VERSION} = "7.2" ] || \
-        [ ${LARADOCK_PHP_VERSION} = "7.3" ] || \
-        [ ${LARADOCK_PHP_VERSION} = "7.4" ]; then \
-      wget "https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_${ARCH}.deb"; \
-      dpkg -i "wkhtmltox_0.12.6-1.buster_${ARCH}.deb"; \
-    elif [ ${LARADOCK_PHP_VERSION} = "8.0" ]; then \
-      wget "https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}.bullseye_${ARCH}.deb"; \
-      dpkg -i "wkhtmltox_${WKHTMLTOPDF_VERSION}.bullseye_${ARCH}.deb"; \
-    else \
-      wget "https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}.bookworm_${ARCH}.deb"; \
-      dpkg -i "wkhtmltox_${WKHTMLTOPDF_VERSION}.bookworm_${ARCH}.deb"; \
-    fi \
-;fi
+RUN if [ "${INSTALL_WKHTMLTOPDF}" = "true" ]; then \
+    ARCH=$(dpkg --print-architecture | sed s/arm64/arm64/ | sed s/amd64/amd64/) && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        libxrender1 \
+        libfontconfig1 \
+        libx11-dev \
+        libjpeg62 \
+        libxtst6 \
+        fontconfig \
+        libjpeg-turbo8 \
+        xfonts-base \
+        xfonts-75dpi \
+        wget && \
+    wget -q https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}.jammy_${ARCH}.deb && \
+    dpkg -i wkhtmltox_${WKHTMLTOPDF_VERSION}.jammy_${ARCH}.deb || apt-get -f install -y && \
+    rm wkhtmltox_${WKHTMLTOPDF_VERSION}.jammy_${ARCH}.deb && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*; \
+fi
 
 #####################################
 # trader:
