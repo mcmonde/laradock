@@ -1233,17 +1233,50 @@ ARG INSTALL_PYTHON3=false
 
 RUN if [ "${INSTALL_PYTHON3}" = true ]; then \
     apt-get update && \
-    apt-get install -y software-properties-common && \
-    add-apt-repository ppa:deadsnakes/ppa -y && \
-    apt-get update && \
-    apt-get install -y python3.12-full python3.12-venv build-essential curl && \
-    python3.12 -m venv /opt/pyenv && \
-    /opt/pyenv/bin/python -m ensurepip && \
-    /opt/pyenv/bin/pip install --upgrade pip virtualenv && \
-    ln -sf /opt/pyenv/bin/python /usr/local/bin/python3 && \
-    ln -sf /opt/pyenv/bin/pip /usr/local/bin/pip ; \
+    apt-get install -y \
+        python3 \
+        python3-pip \
+        python3-venv \
+        qpdf \
+        libssl-dev \
+        openssl \
+        git \
+        ca-certificates && \
+    python3 -m venv /opt/esig && \
+    /opt/esig/bin/pip install --upgrade pip && \
+    /opt/esig/bin/pip install \
+        --break-system-packages \
+        pikepdf \
+        asn1crypto==1.5.1 \
+        attrs==23.2.0 \
+        certifi==2024.6.2 \
+        cffi>=1.17.0 \
+        charset-normalizer==3.3.2 \
+        cryptography==42.0.8 \
+        idna==3.7 \
+        pdfminer.six==20231228 \
+        pillow>=10.4.0 \
+        pycparser==2.22 \
+        pycryptodome==3.20.0 \
+        pyOpenSSL \
+        PyPDF2==2.4.0 \
+        pytz==2024.1 \
+        requests==2.32.3 \
+        urllib3==2.2.2 \
+        qrcode \
+        PyMuPDF \
+        pdfplumber \
+        pypdfium2 \
+        reportlab \
+        pypdf \
+        endesive \
+        git+https://github.com/wbond/oscrypto.git@d5f3437 && \
+    /opt/esig/bin/pip install \
+        pyhanko>=0.43.0 \
+        pyhanko-certvalidator>=0.26.0 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*; \
 fi
-
 
 ###########################################################################
 # POWERLINE:
