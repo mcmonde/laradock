@@ -1561,16 +1561,15 @@ RUN if [ "${INSTALL_WKHTMLTOPDF}" = "true" ]; then \
         libxrender1 \
         libfontconfig1 \
         libx11-dev \
-        libjpeg62 \
+        libjpeg62-turbo \
         libxtst6 \
         fontconfig \
-        libjpeg-turbo8 \
         xfonts-base \
         xfonts-75dpi \
         wget && \
-    wget -q https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}.jammy_${ARCH}.deb && \
-    dpkg -i wkhtmltox_${WKHTMLTOPDF_VERSION}.jammy_${ARCH}.deb || apt-get -f install -y && \
-    rm wkhtmltox_${WKHTMLTOPDF_VERSION}.jammy_${ARCH}.deb && \
+    wget -q https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.jammy_${ARCH}.deb && \
+    dpkg -i wkhtmltox_0.12.6.1-3.jammy_${ARCH}.deb || apt-get -f install -y && \
+    rm -f wkhtmltox_0.12.6.1-3.jammy_${ARCH}.deb && \
     apt-get clean && rm -rf /var/lib/apt/lists/*; \
 fi
 
@@ -1617,9 +1616,11 @@ RUN if [ ${INSTALL_GIT_PROMPT} = true ]; then \
 ARG INSTALL_XMLRPC=false
 
 RUN if [ ${INSTALL_XMLRPC} = true ]; then \
-    apt-get install -yqq php${LARADOCK_PHP_VERSION}-xmlrpc \
+    apt-get update -yqq \
+    && apt-get install -yqq libxml2-dev \
+    && pecl install xmlrpc \
+    && docker-php-ext-enable xmlrpc \
 ;fi
-
 ###########################################################################
 # Lnav:
 ###########################################################################
