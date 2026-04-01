@@ -2267,18 +2267,21 @@ services:
       depends_on:
         - postgres  # <--- Change this to depend on the main 'postgres' service
       environment:
+        - AUTH_PROVIDERS=${AUTH_PROVIDERS}
         - DATABASE_URL=${DATABASE_URL}
         - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
         - JWT_SECRET=${JWT_SECRET}
         - SESSION_SECRET=${SESSION_SECRET}
         - DATA_ENCRYPTION_KEY=${DATA_ENCRYPTION_KEY}
-#        - NEXTAUTH_URL=http://localhost:3333
-        - WHITELISTED_ORIGINS=${WHIITELISTED_ORIGINS}
+        - NEXTAUTH_URL=${VITE_BASE_URL}
+        - WHITELISTED_ORIGINS=${WHITELISTED_ORIGINS}
         - VITE_BASE_URL=${VITE_BASE_URL}
         - VITE_ADMIN_URL=${VITE_ADMIN_URL}
         - VITE_BACKEND_GQL_URL=${VITE_BACKEND_GQL_URL}
         - VITE_BACKEND_WS_URL=${VITE_BACKEND_WS_URL}
         - VITE_BACKEND_API_URL=${VITE_BACKEND_API_URL}
+        - ENABLE_EMAIL_SIGNIN=${ENABLE_EMAIL_SIGNIN}
+        - ALLOW_SECURE_EMAIL_AUTH=${ALLOW_SECURE_EMAIL_AUTH}
       networks:
         - frontend
         - backend
