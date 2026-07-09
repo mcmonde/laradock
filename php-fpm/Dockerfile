@@ -862,31 +862,17 @@ RUN if [ ${INSTALL_IMAGE_OPTIMIZERS} = true ]; then \
 USER root
 
 ARG INSTALL_IMAGEMAGICK=false
-ARG IMAGEMAGICK_VERSION=latest
-ENV IMAGEMAGICK_VERSION ${IMAGEMAGICK_VERSION}
 
-RUN if [ ${INSTALL_IMAGEMAGICK} = true ]; then \
-    apt-get update && \
-    apt-get install -yqq libmagickwand-dev imagemagick && \
-    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-      cd /tmp && \
-      if [ ${IMAGEMAGICK_VERSION} = "latest" ]; then \
-        git clone https://github.com/Imagick/imagick; \
-      else \
-        git clone --branch ${IMAGEMAGICK_VERSION} https://github.com/Imagick/imagick; \
-      fi && \
-      cd imagick && \
-      phpize && \
-      ./configure && \
-      make && \
-      make install && \
-      rm -r /tmp/imagick; \
-    else \
-      pecl install imagick; \
-    fi && \
-    docker-php-ext-enable imagick; \
-    php -m | grep -q 'imagick' \
-;fi
+RUN if [ "$INSTALL_IMAGEMAGICK" = "true" ]; then \
+apt-get update && \
+apt-get install -y --no-install-recommends \
+imagemagick \
+libmagickwand-dev && \
+pecl install imagick && \
+docker-php-ext-enable imagick && \
+rm -rf /var/lib/apt/lists/*; \
+fi
+
 
 ###########################################################################
 # SMB:
