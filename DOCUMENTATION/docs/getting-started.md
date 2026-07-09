@@ -1,7 +1,16 @@
 ---
 sidebar_position: 2
 title: Getting Started
+description: Install Laradock and get a full Dockerized PHP stack running in minutes. Step-by-step setup for new and existing projects, single or multiple apps, on Linux, macOS, and Windows.
+keywords:
+  - laradock installation
+  - laradock setup
+  - install laradock
+  - docker php setup
+  - laravel docker install
 ---
+
+This guide walks you through setting up Laradock for your project, from the prerequisites to a fully running environment. Whether you are starting a brand-new app or adding Docker to an existing one, the steps below have you covered. Pick the installation path that matches your setup and you will have a complete local stack running in minutes.
 
 ## Requirements
 
@@ -13,7 +22,7 @@ title: Getting Started
 
 ## Installation
 
-Choose the setup the best suits your needs.
+Choose the setup that best suits your needs.
 
 - [A) Setup for Single Project](#A)
 	- [A.1) Already have a PHP project](#A1)
@@ -35,12 +44,12 @@ Choose the setup the best suits your needs.
 git submodule add https://github.com/Laradock/laradock.git
 ```
 
-Note: If you are not using Git yet for your project, you can use `git clone` instead of `git submodule `.
+Note: If you are not using Git yet for your project, you can use `git clone` instead of `git submodule`.
 
 *To keep track of your Laradock changes, between your projects and also keep Laradock updated [check these docs](/docs/usage#track-your-laradock-changes)*
 
 
-2 - Make sure your folder structure should look like this:
+2 - Make sure your folder structure looks like this:
 
 ```
 * project-a
@@ -49,7 +58,7 @@ Note: If you are not using Git yet for your project, you can use `git clone` ins
 *   laradock-b
 ```
 
-*(It's important to rename the laradock folders to unique name in each project, if you want to run laradock per project).*
+*(If you want to run Laradock per project, rename the `laradock` folder to a unique name in each project.)*
 
 3 - Go to the [Usage](#Usage) section.
 
@@ -106,21 +115,21 @@ Your folder structure should look like this:
 * project-2
 ```
 
-Make sure the `APP_CODE_PATH_HOST` variable points to parent directory.
+Make sure the `APP_CODE_PATH_HOST` variable points to the parent directory.
 
 ```
 APP_CODE_PATH_HOST=../
 ```
 
-2 - Go to your web server and create config files to point to different project directory when visiting different domains:
+2 - Go to your web server and create config files to point to different project directories when visiting different domains:
 
 For **Nginx** go to `nginx/sites`, for **Apache2** `apache2/sites`. 
 
 Laradock by default includes some sample files for you to copy `app.conf.example`, `laravel.conf.example` and `symfony.conf.example`.
 
-3 - change the default names `*.conf`:
+3 - Change the default names `*.conf`:
 
-You can rename the config files, project folders and domains as you like, just make sure the `root` in the config files, is pointing to the correct project folder name.
+You can rename the config files, project folders and domains as you like, just make sure the `root` in the config files is pointing to the correct project folder name.
 
 4 - Add the domains to the **hosts** files.
 
@@ -132,7 +141,7 @@ You can rename the config files, project folders and domains as you like, just m
 
 If you use Chrome 63 or above for development, don't use `.dev`. [Why?](https://laravel-news.com/chrome-63-now-forces-dev-domains-https). Instead use `.localhost`, `.invalid`, `.test`, or `.example`.
 
-4 - Go to the [Usage](#Usage) section.
+5 - Go to the [Usage](#Usage) section.
 
 
 
@@ -147,7 +156,7 @@ If you use Chrome 63 or above for development, don't use `.dev`. [Why?](https://
 
 If you are using **Docker Toolbox** (VM), do one of the following:
 
-- Upgrade to [Docker Desktop](https://www.docker.com/products/docker-desktop/) for Mac/Windows (Recommended). Check out [Upgrading Laradock](/docs/usage/#upgrading-laradock)
+- Upgrade to [Docker Desktop](https://www.docker.com/products/docker-desktop/) for Mac/Windows (Recommended). Check out [Upgrading Laradock](/docs/usage/#upgrade-laradock)
 - Use Laradock v3.\*. Visit the [Laradock-ToolBox](https://github.com/laradock/laradock/tree/LaraDock-ToolBox) branch. *(outdated)*
 
 <br/>
@@ -166,7 +175,7 @@ We recommend using a Docker Engine version which is newer than 19.03.0.
 cp .env.example .env
 ```
 
-You can edit the `.env` file to choose which software's you want to be installed in your environment. You can always refer to the `docker-compose.yml` file to see how those variables are being used.
+You can edit the `.env` file to choose which software you want installed in your environment. You can always refer to the `docker-compose.yml` file to see how those variables are being used.
 
 Depending on the host's operating system you may need to change the value given to `COMPOSE_FILE`. When you are running Laradock on Mac OS the correct file separator to use is `:`. When running Laradock from a Windows environment multiple files must be separated with `;`.
 
@@ -174,16 +183,16 @@ By default the containers that will be created have the current directory name a
 
 2 - Build the environment and run it using `docker-compose`
 
-In this example we'll see how to run NGINX (web server) and MySQL (database engine) to host a PHP Web Scripts:
+In this example we'll see how to run NGINX (web server) and MySQL (database engine) to host PHP web scripts:
 
 ```bash
 docker-compose up -d nginx mysql
 ```
 
-**Note**: All the web server containers `nginx`, `apache` ..etc depends on `php-fpm`, which means if you run any of them, they will automatically launch the `php-fpm` container for you, so no need to explicitly specify it in the `up` command. If you have to do so, you may need to run them as follows: `docker-compose up -d nginx php-fpm mysql`.
+**Note**: All the web server containers (`nginx`, `apache`, etc.) depend on `php-fpm`, which means if you run any of them, they will automatically launch the `php-fpm` container for you, so there's no need to explicitly specify it in the `up` command. If you have to do so, you may need to run them as follows: `docker-compose up -d nginx php-fpm mysql`.
 
 
-You can select your own combination of containers from [this list](https://laradock.io/introduction/#supported-software-docker-images).
+You can select your own combination of containers from [this list](/docs/Intro#supported-services).
 
 *(Please note that sometimes we forget to update the docs, so check the `docker-compose.yml` file to see an updated list of all available containers).*
 
@@ -218,15 +227,15 @@ Open your PHP project's `.env` file or whichever configuration file you are read
 DB_HOST=mysql
 ```
 
-You need to use the Laradock's default DB credentials which can be found in the `.env` file (ex: `MYSQL_USER=`). 
+You need to use Laradock's default DB credentials, which can be found in the `.env` file (ex: `MYSQL_USER=`). 
 Or you can change them and rebuild the container.  
 
-*If you want to install Laravel as PHP project, see [How to Install Laravel in a Docker Container](#Install-Laravel).*
+*If you want to install Laravel as your PHP project, see [How to Install Laravel in a Docker Container](/docs/usage/#install-laravel).*
 
 <br/>
 5 - Open your browser and visit your localhost address. 
 
-Make sure you add use the right port number as provided by your running server.
+Make sure you use the right port number provided by your running server.
 
 [http://localhost](http://localhost)
 

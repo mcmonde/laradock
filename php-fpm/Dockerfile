@@ -758,11 +758,14 @@ RUN if [ ${INSTALL_IONCUBE} = true ]; then \
 
 ARG INSTALL_OPCACHE=false
 
+# OPcache ships compiled into the base image on all current PHP versions (statically
+# on 8.5, as a shared module on 8.1-8.4), so only build it on the rare image where it
+# is genuinely missing. This skips the redundant rebuild that errored on PHP 8.5.
 RUN if [ ${INSTALL_OPCACHE} = true ]; then \
-    docker-php-ext-install opcache \
+    php -r 'exit(extension_loaded("Zend OPcache") ? 0 : 1);' || docker-php-ext-install opcache \
 ;fi
 
-# Copy opcache configration
+# Copy opcache configuration
 COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 ###########################################################################
@@ -1246,7 +1249,7 @@ ARG NEW_RELIC=${NEW_RELIC}
 ARG NEW_RELIC_KEY=${NEW_RELIC_KEY}
 ARG NEW_RELIC_APP_NAME=${NEW_RELIC_APP_NAME}
 
-RUN if [ ${NEW_RELIC} = true ] ]; then \
+RUN if [ ${NEW_RELIC} = true ]; then \
   curl -L http://download.newrelic.com/php_agent/archive/10.15.0.4/newrelic-php5-10.15.0.4-linux.tar.gz | tar -C /tmp -zx && \
   export NR_INSTALL_USE_CP_NOT_LN=1 && \
   export NR_INSTALL_SILENT=1 && \

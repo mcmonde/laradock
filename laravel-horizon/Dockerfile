@@ -23,6 +23,7 @@ RUN apk --update add wget \
   curl \
   git \
   build-base \
+  linux-headers \
   libmcrypt-dev \
   libxml2-dev \
   pcre-dev \
@@ -77,6 +78,17 @@ RUN set -eux; if [ ${INSTALL_GNUPG} = true ]; then \
       pecl install gnupg; \
       docker-php-ext-enable gnupg; \
     fi
+
+# Install Intl:
+
+ARG INSTALL_INTL=false
+
+RUN if [ ${INSTALL_INTL} = true ]; then \
+    apk add icu-dev && \
+    docker-php-ext-configure intl && \
+    docker-php-ext-install intl && \
+    docker-php-ext-enable intl \
+;fi
 
 #Install LDAP
 ARG INSTALL_LDAP=false;

@@ -1,6 +1,12 @@
 ---
 sidebar_position: 100
 title: Contributions
+description: How to contribute to Laradock, ask questions, report issues, edit the docs, and submit pull requests to the open-source Dockerized PHP development environment.
+keywords:
+  - contribute to laradock
+  - laradock pull request
+  - laradock open source
+  - laradock issues
 ---
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/laradock/laradock)
@@ -8,7 +14,9 @@ title: Contributions
 
 ## Have a Question
 
-If you have questions about how to use Laradock, please direct your questions to the discussion on [Gitter](https://gitter.im/Laradock/laradock). If you believe your question could help others, then consider opening an [Issue](https://github.com/laradock/laradock/issues) (it will be labeled as `Question`) And you can still seek help on Gitter for it.
+Have a question, found a problem, or need something? **mahmoud@zalt.me**
+
+Or open an [Issue](https://github.com/laradock/laradock/issues) on GitHub (it will be labeled as `Question`) so others can benefit from the answer.
 
 
 
@@ -47,7 +55,7 @@ Navigate to the `DOCUMENTATION/docs` directory to locate and edit the Markdown f
 
 ### Host the Documentation Locally
 
-1. Make your changes are made in the `DOCUMENTATION/docs` directory (if you changed anything).
+1. Make your changes in the `DOCUMENTATION/docs` directory.
 2. Navigate to `DOCUMENTATION/`.
 3. Run the following command to start a local Docusaurus server:
    ```
@@ -100,9 +108,9 @@ This setup will allow you to preview your changes in real time.
 
 * Search for the image in the [Docker Hub](https://hub.docker.com/search/) and find the source..
 
-*Most of the image in Laradock are official images, these projects live in other repositories and maintainer by other organizations.*
+*Most of the images in Laradock are official images; these projects live in other repositories and are maintained by other organizations.*
 
-**Note:** Laradock has two base images for (`Workspace` and `php-fpm`, mainly made to speed up the build time on your machine.
+**Note:** Laradock has two base images (`Workspace` and `php-fpm`), mainly made to speed up the build time on your machine.
 
 * Find the dockerfiles, edit them and submit a Pull Request.
 
@@ -128,10 +136,10 @@ This setup will allow you to preview your changes in real time.
 
 Always Test everything and make sure its working:
 
-- Pull the latest updates (or fork of you don’t have permission)
+- Pull the latest updates (or fork if you don’t have permission)
 - Before editing anything:
     - Test building the container (docker-compose build --no-cache container-name) build with no cache first.
-    - Test running the container with some other containers in real app and see of everything is working fine.
+    - Test running the container with some other containers in a real app and see if everything is working fine.
 - Now edit the container (edit section by section and test rebuilding the container after every edited section)
     - Testing building the container (docker-compose build container-name) with no errors.
     - Test it in a real App if possible.

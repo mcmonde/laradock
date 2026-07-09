@@ -10,11 +10,11 @@ type SponsorItem = {
 
 const SponsorList: SponsorItem[] = [
   {
-    link: "https://smart.sista.ai/?utm_source=docs_laradock&utm_medium=sponsor&utm_campaign=landing_page_welcome",
-    imageUrl: "/img/sponsors/sista-ai-logo.png",
+    link: "https://sistava.com/?utm_source=laradock&utm_medium=sponsor_banner&utm_campaign=landing_page",
+    imageUrl: "/img/sponsors/sistava-logo.png",
     description: (
       <>
-        <b>Voice UI for Apps & Websites — Powered by AI Agents</b>
+        <b>Hire <a href="https://sistava.com/?utm_source=laradock&utm_medium=sponsor_banner&utm_campaign=landing_page" target="_blank" style={{ color: '#a47ee6' }}>AI Employees</a> to Run Your Business</b>
       </>
     ),
   },
@@ -25,12 +25,25 @@ function Sponsor({ link, imageUrl, description }: SponsorItem) {
     <div className={clsx("col col--12")}>
       <div className="text--center">
         <a href={link} target="_blank" rel="noopener noreferrer">
-          <img src={imageUrl} className={sponsorsStyles.sponsorImg} role="img" />
+          <img 
+            src={imageUrl} 
+            className={sponsorsStyles.sponsorImg} 
+            role="img"
+            style={{ 
+              maxWidth: '100%',
+              minWidth: '350px',
+              height: 'auto'
+            }} 
+          />
         </a>
       </div>
       <div className="text--center padding-horiz--md">
         
-        <p>{description}</p>
+        <p style={{ 
+          fontSize: 'clamp(1rem, 2vw, 1.2em)',
+          lineHeight: 1.5,
+          margin: '1rem 0'
+        }}>{description}</p>
       </div>
     </div>
   );

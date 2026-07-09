@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="/.github/home-page-images/laradock-logo.jpg?raw=true" alt="Laradock Logo"/>
+    <img src="/.github/home-page-images/laradock-logo.png?raw=true" alt="Laradock Logo"/>
 </p>
 
 <p align="center">
@@ -14,23 +14,107 @@
 <p align="center"><b>Full PHP development environment based on Docker.</b></p>
 
 <p align="center">
+  🌐 <b>Languages:</b> <b>English</b> · <a href="./README-zh.md">简体中文</a> · <a href="./README-ar.md">العربية</a> · <a href="./README-es.md">Español</a>
+</p>
+
+<p align="center">
     <a href="https://zalt.me"><img src="http://forthebadge.com/images/badges/built-by-developers.svg" alt="forthebadge" width="180"></a>
 </p>
 
 <br>
 <br>
 
-<h4 align="center" style="color:#7d58c2">Use Docker First - Learn About It Later!</h4>
+<h2 align="center" style="color:#7d58c2">Use Docker First - Learn About It Later!</h2>
+
+## Overview
+
+Laradock is a full PHP development environment for Docker. It ships pre-configured, ready-to-use containers for everything a PHP application needs (Nginx, PHP-FPM, MySQL, PostgreSQL, Redis, and many more), so you can launch a complete local stack in seconds without any manual setup.
+
+It works with **any PHP project** and behaves the same on Linux, macOS, and Windows.
+
+### Quick Start
+
+Set up a demo stack with `PHP`, `NGINX`, `MySQL`, `Redis` and `Composer`:
+
+1 - Clone Laradock inside your PHP project:
+
+```shell
+git clone https://github.com/Laradock/laradock.git
+```
+
+2 - Enter the laradock folder and rename `.env.example` to `.env`.
+
+```shell
+cp .env.example .env
+```
+
+3 - Run your containers:
+
+```shell
+docker-compose up -d workspace nginx mysql redis
+```
+
+4 - Open your project's `.env` file and set the following:
+
+```shell
+DB_HOST=mysql
+REDIS_HOST=redis
+QUEUE_HOST=beanstalkd
+```
+
+5 - Open your browser and visit localhost: `http://localhost`.
+
+Done.
+
+### Works With
+
+Laradock provides the PHP runtime, web server, databases, and background services your app needs, so it runs virtually any PHP framework, CMS, or e-commerce platform:
+
+- **Frameworks:** Laravel, Symfony, CodeIgniter, Yii, Laminas (Zend Framework), CakePHP, Phalcon, Slim, Lumen, FuelPHP
+- **CMS:** WordPress, Drupal, Joomla, October CMS, Statamic, Craft CMS, TYPO3, Concrete CMS, Grav
+- **E-commerce:** Magento, WooCommerce, PrestaShop, OpenCart, Sylius, Bagisto
+- **Apps:** Moodle, MediaWiki, phpBB, Matomo
+
+…or plain, framework-free PHP.
+
+### Key Features
+
+- **Pre-configured stack:** 70+ ready-to-use containers (Nginx, Apache, Caddy, PHP-FPM, MySQL, PostgreSQL, MariaDB, MongoDB, Redis, Memcached, Elasticsearch, RabbitMQ, Beanstalkd, and more).
+- **All-in-one dev shell:** run Artisan, Composer, Node, and every CLI your project needs inside the ready-made `workspace` container, with nothing installed on your host.
+- **Easy version switching:** change PHP (5.6–8.5), database, or service versions in one place.
+- **Project-agnostic:** works with Laravel, Symfony, WordPress, Drupal, Magento, or vanilla PHP.
+- **Cross-platform:** the same environment on Linux, macOS, and Windows.
+- **Modular:** run only the containers you need, in any combination.
+- **Beginner-friendly:** clone, copy the env file, and run `docker compose up`.
+
+### The Workspace: Your All-in-One Dev Shell
+
+A command line preloaded with PHP, Composer, Node, Git, and dozens of dev tools, so you run every command your project needs *inside* it and install nothing on your own machine.
+
+Enter it and work from there:
+
+```bash
+docker-compose exec workspace bash
+```
+
+`artisan`, `composer`, `phpunit`, `npm`, and `git` all just work, with nothing installed on your host: no PHP, no Composer, no Node, no version conflicts. Stop the project and **zero traces are left on your device.**
+
+Why it's a big deal:
+
+- **Start in seconds.** Every tool is already installed and configured, so there's nothing to set up; clone a project and get to work.
+- **Keep your machine spotless.** Run everything inside the container; your host never gets PHP, Composer, Node, or any CLI, and nothing is left behind when you're done.
+- **Isolate every project.** Each one runs on its own PHP and database versions with no conflicts between them.
+- **Revive old projects.** Run legacy apps on older PHP (5.6, 7.x) without touching your system's PHP version.
+
+<br>
 
 <p align="center">
-	<a href="https://laradock.io">
-	   <img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/documentation-button.png" width="300px" alt="Laradock Documentation"/>
-	</a>
+  <a href="https://laradock.io">
+     <img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/documentation-button.png" width="300px" alt="Laradock Documentation"/>
+  </a>
 </p>
 
-
 ---
-
 
 ## Awesome People
 
@@ -163,10 +247,16 @@ Laradock is an MIT-licensed open source project with its ongoing development mad
 
 ### Financial Contributors (Backers)
 
-[![Open Collective backers](https://opencollective.com/laradock/tiers/awesome-backers.svg?width=800&avatarHeight=65&button=false&isActive=true)](https://opencollective.com/laradock#contributors)
+[![Open Collective backers](https://opencollective.com/laradock/tiers/awesome-backers.svg?width=800&avatarHeight=65&button=false&isActive=false)](https://opencollective.com/laradock#contributors)
 
 
 
+
+## Contact
+
+Have a question, found a problem, or need something? **mahmoud@zalt.me**
+
+For security vulnerabilities, see [SECURITY.md](SECURITY.md).
 
 ## Sponsors
 
@@ -175,48 +265,49 @@ Sponsoring is an act of giving in a different fashion. 🌱
 ### Diamond Sponsors
 
 <p align="left">
-  <a href="https://smart.sista.ai/?utm_source=docs_laradock&utm_medium=sponsor&utm_campaign=github_readme_page" target="_blank"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/sista-ai-icon.png" height="165px" alt="Sista AI - Plug-and-Play AI Assistant." style="margin-right: 4em;"></a><a href="http://apiato.io/" target="_blank"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/apiato.png" height="165px" alt="Apiato - A powerful PHP framework for building scalable, enterprise-grade APIs!"></a>
+  <a href="https://sistava.com/?utm_source=docs_laradock&utm_medium=sponsor&utm_campaign=github_readme_page" target="_blank"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/sista-ai-icon.png" height="165px" alt="Sistava - Hire AI Employees to Run Your Business." style="margin-right: 4em;"></a><a href="http://apiato.io/" target="_blank"><img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/custom-sponsors/apiato.png" height="135px" alt="Apiato - A powerful PHP framework for building scalable, enterprise-grade APIs!"></a>
 </p>
 
 
 ### Gold Sponsors
 
 <div style="display: flex; flex-wrap: wrap; gap: 25px; justify-content: left; align-items: left;">
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/0/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/0/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/1/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/1/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/2/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/2/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/3/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/3/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/4/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/4/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/5/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/5/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/6/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/6/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/7/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/7/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/8/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/8/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/9/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/9/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/10/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/10/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/11/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/11/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/12/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/12/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/13/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/13/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/14/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/14/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/15/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/15/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/16/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/16/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/17/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/17/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/18/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/18/avatar.svg?avatarHeight=100" height="115" /></a>
-  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/19/website" target="_blank" rel="sponsored"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/19/avatar.svg?avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/0/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/0/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/1/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/1/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/2/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/2/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/3/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/3/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/4/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/4/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/5/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/5/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/6/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/6/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/7/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/7/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/8/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/8/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/9/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/9/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/10/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/10/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/11/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/11/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/12/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/12/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/13/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/13/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/14/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/14/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/15/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/15/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/16/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/16/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/17/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/17/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/18/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/18/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
+  <a href="https://opencollective.com/laradock/tiers/gold-sponsors/19/website" target="_blank"><img src="https://opencollective.com/laradock/tiers/gold-sponsors/19/avatar.png?isActive=true&avatarHeight=100" height="115" /></a>
 </div>
 
 ### Silver Sponsors
 
-![Silver Sponsors](https://opencollective.com/laradock/tiers/silver-sponsors.svg?avatarHeight=90&width=800&format=svg&button=false&background=%231B1B1D)
+![Silver Sponsors](https://opencollective.com/laradock/tiers/silver-sponsors.svg?avatarHeight=90&width=800&format=svg&button=false&background=%231B1B1D&isActive=false)
+
+<p align="left">
+  <a href="https://sista.ai/?utm_source=docs_laradock&utm_medium=sponsor&utm_campaign=github_readme_page" target="_blank"><img src="https://raw.githubusercontent.com/laradock/laradock/master/DOCUMENTATION/static/img/sponsors/sista-ai-icon-gradient-purple-orange.png" height="90px" alt="Sista AI - AI Workforce platform."></a>
+</p>
 
 ### Bronze Sponsors
 
-![Bronze Sponsors](https://opencollective.com/laradock/tiers/bronze-sponsors.svg?avatarHeight=65&width=800&format=svg&button=false&background=%231B1B1D)
+![Bronze Sponsors](https://opencollective.com/laradock/tiers/bronze-sponsors.svg?avatarHeight=65&width=800&format=svg&button=false&background=%231B1B1D&isActive=false)
 
-
-## Translations
-
-- [中文文档 (Chinese)](./README-zh.md)
 
 ## License
 
 [MIT](https://github.com/laradock/laradock/blob/master/LICENSE) © [Mahmoud Zalt](https://zalt.me/)
+
